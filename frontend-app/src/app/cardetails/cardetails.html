@@ -1,0 +1,69 @@
+<div class="container">
+  <h1 class="title">Cadastro de Carros</h1>
+
+  <form [formGroup]="carForm" (ngSubmit)="onSubmit()" class="car-form">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="mark">Marca</label>
+        <input id="mark" formControlName="mark" placeholder="Marca" />
+      </div>
+      <div class="form-group">
+        <label for="model">Modelo</label>
+        <input id="model" formControlName="model" placeholder="Modelo" />
+      </div>
+      <div class="form-group">
+        <label for="color">Cor</label>
+        <input id="color" formControlName="color" placeholder="Cor" />
+      </div>
+      <div class="form-group">
+        <label for="km">Km</label>
+        <input id="km" formControlName="km" placeholder="Km" />
+      </div>
+      <div class="form-group">
+        <label for="price">Preço</label>
+        <input id="price" formControlName="price" placeholder="Preço" />
+      </div>
+      <div class="form-group">
+        <label for="year">Ano</label>
+        <input id="year" formControlName="year" placeholder="Ano" />
+      </div>
+    </div>
+
+    <button type="submit" class="submit-button">
+      {{ carForm.value.id ? 'Atualizar' : 'Cadastrar' }} Carro
+    </button>
+  </form>
+
+  <div class="car-table">
+    <h2>Lista de Carros</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Marca</th>
+          <th>Modelo</th>
+          <th>Cor</th>
+          <th>Km</th>
+          <th>Preço</th>
+          <th>Ano</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let car of cars" >
+          <td>{{ car.id }}</td>
+          <td>{{ car.mark }}</td>
+          <td>{{ car.model }}</td>
+          <td>{{ car.color }}</td>
+          <td>{{ car.km }}</td>
+          <td>{{ car.price }}</td>
+          <td>{{ car.year }}</td>
+          <td>
+            <button (click)="selectCar(car)" class="edit-button">Editar</button>
+            <button (click)="deleteCar()" class="delete-button">Apagar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
