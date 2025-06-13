@@ -1,7 +1,7 @@
 <div class="container">
   <h1 class="title">Cadastro de Carros</h1>
 
-  <form [formGroup]="carForm" (ngSubmit)="onSubmit()" class="car-form">
+  <form [formGroup]="carForm" class="car-form">
     <div class="form-grid">
       <div class="form-group">
         <label for="mark">Marca</label>
@@ -29,8 +29,12 @@
       </div>
     </div>
 
-    <button type="submit" class="submit-button">
+    <button type="submit" class="submit-button" (click)="createCar()"> 
       {{ carForm.value.id ? 'Atualizar' : 'Cadastrar' }} Carro
+    </button>
+
+    <button type="button" class="submit-button" (click)="getCarList()">
+      Ver Carros
     </button>
   </form>
 
@@ -50,7 +54,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let car of cars" >
+        <tr *ngFor="let car of cars">
           <td>{{ car.id }}</td>
           <td>{{ car.mark }}</td>
           <td>{{ car.model }}</td>
@@ -60,7 +64,7 @@
           <td>{{ car.year }}</td>
           <td>
             <button (click)="selectCar(car)" class="edit-button">Editar</button>
-            <button (click)="deleteCar()" class="delete-button">Apagar</button>
+            <button (click)="deleteCar(car.id)" class="delete-button">Apagar</button>
           </td>
         </tr>
       </tbody>

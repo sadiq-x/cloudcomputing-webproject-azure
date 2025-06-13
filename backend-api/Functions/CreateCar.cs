@@ -19,14 +19,15 @@ namespace backend_api.Functions
 
         [Function("CreateCar")] //Function to do login
         [Produces("application/json")]
-        public async Task<HttpResponseData> Run1(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "create/car")] HttpRequestData req) //Create the Http req and res
+        public async Task<HttpResponseData> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "create/car")] HttpRequestData req) //Create the Http req and res
         {
 
+            var createCarModel = await req.ReadFromJsonAsync<CarsModels>();
             var responseBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var createCarModel = JsonSerializer.Deserialize<CarsModels>(responseBody);
-
-            if (createCarModel == null)
+            //Console.WriteLine(responseBody.ToString());
+            //var createCarModel = JsonSerializer.Deserialize<CarsModels>(responseBody);
+            if (createCarModel == null || string.IsNullOrEmpty(createCarModel.Mark) || string.IsNullOrEmpty(createCarModel.Color) || string.IsNullOrEmpty(createCarModel.Km) || string.IsNullOrEmpty(createCarModel.Model) || string.IsNullOrEmpty(createCarModel.Price) || string.IsNullOrEmpty(createCarModel.Year)) 
             {
                 var BadResponse = req.CreateResponse(HttpStatusCode.BadRequest);
                 await BadResponse.WriteAsJsonAsync(new { message = "Car don't received." });
@@ -41,6 +42,7 @@ namespace backend_api.Functions
                 await BadResponse.WriteAsJsonAsync(new { message = "Car not created." });
                 return BadResponse;
             }
+            Console.WriteLine(createdCar.ToString());
 
             var OkResponse = req.CreateResponse(HttpStatusCode.OK);
             await OkResponse.WriteAsJsonAsync(new { createdCar });

@@ -20,10 +20,13 @@ namespace backend_api.Functions
         [Function("DeleteCar")] //Function to do login
         [Produces("application/json")]
         public async Task<HttpResponseData> Run1(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "delete/car")] HttpRequestData req) //Create the Http req and res
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "delete/car")] HttpRequestData req) //Create the Http req and res
         {
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var deleteCarModel = JsonSerializer.Deserialize<CarsModels>(requestBody);
+
+            Console.WriteLine("Request body: " + requestBody);
+            Console.WriteLine("Id received: " + deleteCarModel?.Id);
 
             if (deleteCarModel == null || deleteCarModel.Id <= 0)
             {

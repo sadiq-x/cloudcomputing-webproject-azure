@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './cardetails.html',
   styleUrl: './cardetails.css',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule] // 🔥 Import necessário aqui
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class CardetailsComponent implements OnInit {
 
@@ -38,7 +38,6 @@ export class CardetailsComponent implements OnInit {
   loadCars() {
     this.carService.getCar().subscribe({
       next: (rst: any) => {
-        console.log(rst);
         this.cars = rst.carGet;
       }
     });
@@ -48,15 +47,44 @@ export class CardetailsComponent implements OnInit {
     this.carForm.patchValue(car);
   }
 
-  onSubmit() {
+  createCar() {
     if (this.carForm.value.id) {
-      
+      console.log(this.carForm.value)
+      this.carService.updateCar(this.carForm.value).subscribe({
+        next: (rst: any) => {
+          console.log(rst)
+          this.loadCars();
+          this.resetForm();
+        }
+      });
     } else {
-      
+      console.log(this.carForm.value)
+      this.carService.createCar(this.carForm.value).subscribe({
+        next: () => {
+          this.loadCars();
+          this.resetForm();
+        }
+      });
     }
   }
 
-  deleteCar() {
-    
+  getCarList() {
+    this.loadCars();
+  }
+
+  deleteCar(carId?: number) {
+    console.log(carId)
+    if (confirm('Tem certeza que deseja apagar este carro?')) {
+      this.carService.deleteCar({ id: carId }).subscribe({
+        next: () => {
+          this.loadCars();
+          this.resetForm();
+        }
+      });
+    }
+  }
+
+  resetForm() {
+    this.carForm.reset();
   }
 }

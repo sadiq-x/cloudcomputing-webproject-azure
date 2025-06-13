@@ -21,7 +21,7 @@ namespace backend_api.Repositories
         }
         public async Task<List<CarsModels>?> GetCars() //Get List of Cars
         {
-            var dbContext = _readContextFactory.CreateDbContext();
+            using var dbContext = _readContextFactory.CreateDbContext();
             var carsList = await dbContext.Cars.Select(list => new CarsModels
             {
                 Id = list.Id,
@@ -33,7 +33,7 @@ namespace backend_api.Repositories
                 Price = list.Price
             }).ToListAsync();
 
-            if(carsList == null)
+            if (carsList == null)
                 return null;
 
             return carsList;
@@ -43,7 +43,7 @@ namespace backend_api.Repositories
             if (t == null)
                 return null;
 
-            var dbContext = _readContextFactory.CreateDbContext();
+            using var dbContext = _readContextFactory.CreateDbContext();
 
             var car = new Cars
             {
@@ -62,9 +62,8 @@ namespace backend_api.Repositories
         }
         public async Task<bool> DeleteCar(CarsModels t)
         {
-            var dbContext = _readContextFactory.CreateDbContext();
+            using var dbContext = _readContextFactory.CreateDbContext();
             var deleteCar = await dbContext.Cars.FirstOrDefaultAsync(a => a.Id == t.Id);
-
             if (deleteCar == null)
                 return false;
 
@@ -73,19 +72,20 @@ namespace backend_api.Repositories
             return true;
         }
         public async Task<bool> UpdateCar(CarsModels t)
-        {
-            var dbContext = _readContextFactory.CreateDbContext();
+        {   
+            Console.WriteLine($"Id recebido: {t.Id}");
+            using var dbContext = _readContextFactory.CreateDbContext();
             var updateCar = await dbContext.Cars.FirstOrDefaultAsync(a => a.Id == t.Id);
-
+            Console.WriteLine(t.Id.ToString());
             if (updateCar == null)
                 return false;
 
-            updateCar.Mark = string.IsNullOrEmpty(t.Mark) ? updateCar.Mark : t.Mark;
-            updateCar.Model = string.IsNullOrEmpty(t.Model) ? updateCar.Model : t.Model;
-            updateCar.Price = string.IsNullOrEmpty(t.Price) ? updateCar.Price : t.Price;
-            updateCar.Km = string.IsNullOrEmpty(t.Km) ? updateCar.Km : t.Km;
-            updateCar.Year = string.IsNullOrEmpty(t.Year) ? updateCar.Year : t.Year;
-            updateCar.Color = string.IsNullOrEmpty(t.Color) ? updateCar.Color : t.Color;
+            updateCar.Mark = !string.IsNullOrWhiteSpace(t.Mark) ? t.Mark : updateCar.Mark;
+            updateCar.Model = !string.IsNullOrWhiteSpace(t.Model) ? t.Model : updateCar.Model;
+            updateCar.Price = !string.IsNullOrWhiteSpace(t.Price) ? t.Price : updateCar.Price;
+            updateCar.Km = !string.IsNullOrWhiteSpace(t.Km) ? t.Km : updateCar.Km;
+            updateCar.Year = !string.IsNullOrWhiteSpace(t.Year) ? t.Year : updateCar.Year;
+            updateCar.Color = !string.IsNullOrWhiteSpace(t.Color) ? t.Color : updateCar.Color;
 
             await dbContext.SaveChangesAsync();
 

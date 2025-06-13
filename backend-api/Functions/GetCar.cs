@@ -17,7 +17,7 @@ namespace backend_api.Functions
         [Function("GetCar")] //Function to do login
         [Produces("application/json")]
         public async Task<HttpResponseData> Run1(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "get/car")] HttpRequestData req) //Create the Http req and res
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "get/car")] HttpRequestData req) //Create the Http req and res
         {
             var carGet = await _carRepository.GetCars();
 
