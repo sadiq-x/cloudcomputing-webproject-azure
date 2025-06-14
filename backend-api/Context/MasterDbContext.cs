@@ -24,17 +24,4 @@ namespace backend_api.Context
         public string? Price { get; set; } 
         public string? Year { get; set; } 
     }
-
-    [Table("Person")]
-    public class Person
-    {
-        [Key]
-        public int? Id { get; set; }
-        public string? Name { get; set; }
-        public string? JobPosition { get; set; }
-        public string? Gender { get; set; }
-        public string? Age { get; set; }
-        public string? Location { get; set; } 
-        public string? Hobby { get; set; } 
-    }
 }

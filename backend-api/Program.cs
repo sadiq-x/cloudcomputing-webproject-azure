@@ -28,7 +28,6 @@ builder.Services.AddSingleton<RemoveAliasInterceptor>();
 
 //Adding the interface of car repository
 builder.Services.AddSingleton<ICarRepository, CarRepository>();
-builder.Services.AddSingleton<ICPersonRepository, PersonRepository>();
 builder.Services.AddHttpClient();
 
 builder.Build().Run();
